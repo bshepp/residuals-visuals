@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+
+# generated artifacts (huge — never commit)
+cache/
+output/
+package/
+blender_scenes/
+exploration/*.png
+
+# editor
+.vscode/
+.idea/
+*.swp
+
