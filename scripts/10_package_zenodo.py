@@ -98,7 +98,7 @@ def write_metadata_json(path: Path) -> None:
                 "feature-extraction research.</p>"
             ),
             "creators": [
-                {"name": "Shepherd, Bryan", "affiliation": "Independent researcher", "orcid": ""}
+                {"name": "Sheppard, Brian", "affiliation": "Independent researcher", "orcid": ""}
             ],
             "keywords": [
                 "lidar",
