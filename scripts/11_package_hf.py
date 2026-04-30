@@ -149,7 +149,7 @@ Single `train` split with 39,716 rows. The dataset is small enough that downstre
 ```python
 from datasets import load_dataset
 
-ds = load_dataset("bshepp/diverge-residuals")
+ds = load_dataset("bshepp/residuals-fingerprints")
 print(ds)
 print(ds["train"][0]["decomp_family"], ds["train"][0]["decomp_params"])
 ds["train"][0]["image"]  # PIL.Image.Image, 256x256

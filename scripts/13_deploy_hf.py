@@ -6,8 +6,8 @@ Steps:
   2. Upload everything in package/hf/ to the repo root.
 
 Usage:
-  python scripts/13_deploy_hf.py --repo bshepp/diverge-residuals
-  python scripts/13_deploy_hf.py --repo bshepp/diverge-residuals --private  # private first, flip to public later via web
+  python scripts/13_deploy_hf.py --repo bshepp/residuals-fingerprints
+  python scripts/13_deploy_hf.py --repo bshepp/residuals-fingerprints --private  # private first, flip to public later via web
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ def run(cmd: list[str]) -> subprocess.CompletedProcess:
 
 def main() -> None:
     p = argparse.ArgumentParser()
-    p.add_argument("--repo", required=True, help='HF dataset repo id, e.g. "bshepp/diverge-residuals"')
+    p.add_argument("--repo", required=True, help='HF dataset repo id, e.g. "bshepp/residuals-fingerprints"')
     p.add_argument("--private", action="store_true", help="create as private dataset (default: public)")
     args = p.parse_args()
 

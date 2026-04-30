@@ -2,7 +2,7 @@
 Robust HF deployment using huggingface_hub Python API directly.
 Uploads each file individually with retry + progress, more debuggable than `hf upload`.
 
-Usage: python scripts/13b_deploy_hf_pyapi.py --repo bshepp/diverge-residuals
+Usage: python scripts/13b_deploy_hf_pyapi.py --repo bshepp/residuals-fingerprints
 """
 
 from __future__ import annotations
