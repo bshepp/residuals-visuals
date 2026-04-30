@@ -2,6 +2,11 @@
 
 Artistic and educational visualizations of the **RESIDUALS exhaustive parameter sweep** — 39,731 residual arrays produced by running 593 distinct decomposition configurations × 25 upsampling configurations on a Fairfield County, Ohio LiDAR DEM.
 
+- **Project page**: https://residuals.briansheppard.com
+- **Dataset (HF)**: https://huggingface.co/datasets/bshepp/residuals-fingerprints
+- **Archive (Zenodo, DOI)**: https://doi.org/10.5281/zenodo.19903273
+- **Source pipeline**: https://github.com/bshepp/RESIDUALS
+
 This project is **standalone** — it does not import from RESIDUALS. It only consumes the `.npy` outputs (4.28 TB) at `D:/DIVERGE_exhaustive/results/` and the source DEM at `F:/science-projects/RESIDUALS/data/test_dems/fairfield_sample_1.5ft.npy`.
 
 ## What it makes

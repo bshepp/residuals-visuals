@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RESIDUALS — 39,731 algorithmic lenses on a single LiDAR DEM</title>
+<meta name="description" content="An exhaustive parameter sweep of 593 decomposition × 25 upsampling methods applied to a Fairfield County LiDAR DEM. 39,731 residuals visualized as a zoo grid, parameter-sweep videos, and 3D UMAP atlas.">
+<meta property="og:title" content="RESIDUALS — 39,731 algorithmic lenses on a single LiDAR DEM">
+<meta property="og:description" content="Exhaustive parameter sweep of decomposition × upsampling methods on a single LiDAR DEM, visualized.">
+<meta property="og:image" content="https://residuals.briansheppard.com/assets/algorithm_zoo.png">
+<meta property="og:url" content="https://residuals.briansheppard.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --bg-elev: #14141a;
+    --fg: #e7e7ec;
+    --fg-dim: #9a9aa6;
+    --fg-faint: #5a5a66;
+    --accent: #d14a7b;
+    --accent-2: #4ad1c8;
+    --rule: #25252e;
+    --code-bg: #1d1d24;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-2); text-decoration: none; border-bottom: 1px solid transparent; }
+  a:hover { border-bottom-color: var(--accent-2); }
+  code, pre, .mono { font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace; }
+  code { background: var(--code-bg); padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.92em; }
+  pre {
+    background: var(--code-bg);
+    padding: 1em 1.2em;
+    border-radius: 6px;
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 4em 0; }
+  h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
+  h1 { font-size: 2.6rem; font-weight: 700; margin: 0 0 0.4em; letter-spacing: -0.025em; }
+  h2 { font-size: 1.7rem; font-weight: 600; margin: 0 0 0.6em; }
+  h3 { font-size: 1.15rem; font-weight: 600; margin: 1.6em 0 0.4em; color: var(--fg); }
+  p { margin: 0 0 1em; }
+  ul, ol { padding-left: 1.4em; margin: 0 0 1em; }
+  li { margin-bottom: 0.4em; }
+  table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.94em; }
+  th, td { text-align: left; padding: 0.55em 0.9em; border-bottom: 1px solid var(--rule); }
+  th { color: var(--fg-dim); font-weight: 500; }
+  td.mono { font-size: 0.88em; }
+  figure { margin: 2.2em 0; }
+  figcaption { font-size: 0.86em; color: var(--fg-dim); margin-top: 0.7em; text-align: center; }
+  img, video, iframe { max-width: 100%; display: block; }
+  img.framed, video.framed {
+    border-radius: 6px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.45);
+    border: 1px solid var(--rule);
+  }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 1.4em; }
+  .hero {
+    padding: 5.5em 0 3em;
+    border-bottom: 1px solid var(--rule);
+    background:
+      radial-gradient(circle at 20% 0%, rgba(209, 74, 123, 0.10), transparent 50%),
+      radial-gradient(circle at 80% 30%, rgba(74, 209, 200, 0.07), transparent 50%);
+  }
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 1.2em;
+  }
+  .lede {
+    font-size: 1.22rem;
+    color: var(--fg-dim);
+    max-width: 56ch;
+    line-height: 1.55;
+  }
+  .badges {
+    margin-top: 2em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7em;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.45em 0.95em;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: 0.86rem;
+    color: var(--fg);
+    transition: border-color 120ms;
+  }
+  .badge:hover { border-color: var(--accent-2); }
+  .badge .label { color: var(--fg-faint); margin-right: 0.2em; }
+
+  section { padding: 4em 0; }
+  section.tight { padding: 2.5em 0; }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5em;
+    margin: 2em 0;
+  }
+  .stat {
+    padding: 1.2em 1.4em;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+  }
+  .stat .num {
+    font-size: 1.95rem;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .stat .label {
+    color: var(--fg-dim);
+    font-size: 0.84rem;
+    margin-top: 0.25em;
+  }
+
+  .video-wrap {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: black;
+  }
+  .video-wrap video { width: 100%; display: block; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5em;
+  }
+  @media (max-width: 720px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    h1 { font-size: 2rem; }
+    .lede { font-size: 1.05rem; }
+  }
+
+  .iframe-wrap {
+    width: 100%;
+    height: 720px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: black;
+  }
+  .iframe-wrap iframe { width: 100%; height: 100%; border: 0; }
+
+  footer {
+    padding: 3em 0 4em;
+    border-top: 1px solid var(--rule);
+    color: var(--fg-dim);
+    font-size: 0.92rem;
+  }
+  footer a { color: var(--fg-dim); border-bottom: 1px solid var(--rule); }
+  footer a:hover { color: var(--accent-2); border-bottom-color: var(--accent-2); }
+
+  .toc {
+    border-left: 2px solid var(--rule);
+    padding: 0.6em 0 0.6em 1.4em;
+    margin: 2em 0;
+    color: var(--fg-dim);
+    font-size: 0.95em;
+  }
+  .toc a { color: var(--fg); border: 0; }
+  .toc a:hover { color: var(--accent-2); }
+  .toc ul { padding-left: 0; list-style: none; }
+  .toc li { margin-bottom: 0.3em; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">RESIDUALS · prior-art exhaustive sweep</div>
+    <h1>39,731 algorithmic lenses on a single LiDAR DEM</h1>
+    <p class="lede">
+      What does the same hill look like through 593 different decomposition algorithms,
+      each rendered at 25 different upsampling fidelities? Here's the answer.
+      4.28 TB of float64 residuals, distilled into a navigable atlas, an algorithm zoo poster,
+      a parameter-sweep video set, and a Blender flythrough through the embedding space.
+    </p>
+    <div class="badges">
+      <a class="badge" href="https://huggingface.co/datasets/bshepp/residuals-fingerprints">
+        <span class="label">Dataset</span> Hugging Face
+      </a>
+      <a class="badge" href="https://github.com/bshepp/residuals-visuals">
+        <span class="label">Code</span> GitHub: residuals-visuals
+      </a>
+      <a class="badge" href="https://github.com/bshepp/RESIDUALS">
+        <span class="label">Source pipeline</span> GitHub: RESIDUALS
+      </a>
+      <a class="badge" href="https://doi.org/10.5281/zenodo.19903273">
+        <span class="label">Archive</span> Zenodo · DOI 10.5281/zenodo.19903273
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="tight">
+  <div class="container">
+    <div class="stat-row">
+      <div class="stat"><div class="num">39,731</div><div class="label">residual outputs</div></div>
+      <div class="stat"><div class="num">593</div><div class="label">decomposition configs</div></div>
+      <div class="stat"><div class="num">25</div><div class="label">upsampling methods</div></div>
+      <div class="stat"><div class="num">4.28 TB</div><div class="label">total float64 data</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>The flythrough</h2>
+    <p>
+      Each glowing dot is one residual: a 3D UMAP embedding of a 40-dim signature
+      (radial-FFT power spectrum + statistical moments) computed for every one
+      of the 39,716 successfully-fingerprinted outputs. Color = decomposition
+      category. The camera dives through the central density and arcs around
+      the wavelet, morphological, and edge-preserving regions in turn.
+    </p>
+    <figure>
+      <div class="video-wrap">
+        <video controls autoplay muted loop playsinline preload="metadata" poster="assets/poster_flythrough.jpg">
+          <source src="assets/atlas_flythrough.mp4" type="video/mp4">
+          Your browser does not support inline video. <a href="assets/atlas_flythrough.mp4">Download the MP4</a>.
+        </video>
+      </div>
+      <figcaption>1080p / 30 fps / 45 sec · Eevee Next, AgX color, fog-glow bloom · 39,716 emission-shaded points</figcaption>
+    </figure>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="container">
+    <h2>The algorithm zoo</h2>
+    <p>
+      The same 640×640 patch of Fairfield County terrain — a sweeping diagonal stream
+      channel with branching drainage and a sharp V-shaped linear feature — seen through
+      24 different decomposition algorithms, all upsampled with bicubic_scale2 for fair
+      comparison. Each one preserves and destroys different feature types. Wavelets become
+      watered silk. Morphological-rect carves out V-shapes. Polynomial trend-removal
+      paints regional gradients. Bilateral becomes a comic-book inkwash.
+    </p>
+    <figure>
+      <a href="assets/algorithm_zoo.png">
+        <img class="framed" src="assets/algorithm_zoo.png" alt="24-panel algorithm zoo grid">
+      </a>
+      <figcaption>Click for full resolution (~3300 × 3500 px, 8.7 MB).</figcaption>
+    </figure>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="container">
+    <h2>Parameter sweeps</h2>
+    <p>
+      For one algorithm at a time, scrub through a single parameter axis and watch the
+      residual smoothly morph. Loops between 5 and 8 seconds at 24 fps. Each video uses
+      a shared color scale across all keyframes so changes feel like the same scene
+      under different settings, not separate images jumbled together.
+    </p>
+
+    <div class="grid-2">
+      <figure>
+        <div class="video-wrap">
+          <video controls muted loop playsinline preload="metadata">
+            <source src="assets/sweeps/gaussian_sigma.mp4" type="video/mp4">
+          </video>
+        </div>
+        <figcaption><b>Gaussian σ ∈ {2, 5, 10, 20, 50, 100}</b><br>
+        Watch features at successively coarser scales blur out into the trend.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="video-wrap">
+          <video controls muted loop playsinline preload="metadata">
+            <source src="assets/sweeps/aniso_diff_iterations.mp4" type="video/mp4">
+          </video>
+        </div>
+        <figcaption><b>Anisotropic diffusion iterations ∈ {5, 10, 20, 50}</b><br>
+        Edges sharpen as iterations accumulate; flat regions homogenize.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="video-wrap">
+          <video controls muted loop playsinline preload="metadata">
+            <source src="assets/sweeps/wavelet_bior_level.mp4" type="video/mp4">
+          </video>
+        </div>
+        <figcaption><b>Wavelet (bior3.5) level ∈ {1..5}</b><br>
+        Each level halves the spatial resolution of the kept approximation.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="video-wrap">
+          <video controls muted loop playsinline preload="metadata">
+            <source src="assets/sweeps/morph_size.mp4" type="video/mp4">
+          </video>
+        </div>
+        <figcaption><b>Morphological opening size ∈ {5, 10, 20, 50, 100}</b><br>
+        Structuring element grows; smaller features get swallowed first.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="video-wrap">
+          <video controls muted loop playsinline preload="metadata">
+            <source src="assets/sweeps/bilateral_sigma_space.mp4" type="video/mp4">
+          </video>
+        </div>
+        <figcaption><b>Bilateral σ_space ∈ {25..150}</b><br>
+        Edge preservation unchanged; spatial smoothing radius grows.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="video-wrap">
+          <video controls muted loop playsinline preload="metadata">
+            <source src="assets/sweeps/dog_sigma_high.mp4" type="video/mp4">
+          </video>
+        </div>
+        <figcaption><b>DoG σ_high ∈ {5..100}</b><br>
+        Difference-of-Gaussians band shifts toward larger blob scales.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="container">
+    <h2>The interactive 3D atlas</h2>
+    <p>
+      A 3D UMAP of all 39,716 residual signatures, rendered with Plotly. Drag to orbit,
+      scroll to zoom, hover any point for its decomposition family, parameters, and source
+      filename. Toggle entire categories on/off with the legend.
+    </p>
+    <p style="color: var(--fg-dim); font-size: 0.95em;">
+      <em>Note: this is a 19 MB self-contained HTML. It loads inline below — give it a few
+      seconds. Or open the standalone version:
+      <a href="atlas_explorer.html">atlas_explorer.html</a>.</em>
+    </p>
+    <figure>
+      <div class="iframe-wrap">
+        <iframe src="atlas_explorer.html" loading="lazy" title="3D UMAP atlas explorer"></iframe>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="container">
+    <h2>What this is, in plain language</h2>
+    <p>
+      Take a single Digital Elevation Model — a 1500×375 grid of elevations from a LiDAR
+      survey of Fairfield County, Ohio, sampled at 3.33 ft per pixel. Now apply a signal
+      decomposition algorithm: separate the elevation into a smooth "trend" and a
+      "residual" of local deviations. The choice of algorithm — Gaussian blur, wavelet,
+      bilateral filter, morphological opening, anisotropic diffusion, polynomial fit, etc. —
+      determines which features land in the residual and which get absorbed into the trend.
+    </p>
+    <p>
+      A small literature exists on which combinations are best for archaeological
+      feature detection in LiDAR (the immediate motivation: detecting subtle
+      Hopewell-era earthworks in Ohio). But "best" is contingent on what features you
+      care about. The goal of the underlying RESIDUALS project was to map the entire
+      space of plausible algorithm × parameter × upsampling combinations exhaustively —
+      every reasonable knob setting, computed and saved — and document the prior art
+      so nobody can patent these specific combinations on DEMs after the fact.
+    </p>
+    <p>
+      This project, <code>residuals-visuals</code>, is the artistic / educational side of
+      that prior-art deposit. The same dataset, but rendered so it's possible to look at
+      and feel its structure.
+    </p>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="container">
+    <h2>How to use the data</h2>
+
+    <h3>Hugging Face dataset</h3>
+    <pre><code>from datasets import load_dataset
+
+ds = load_dataset("bshepp/residuals-fingerprints", split="train")
+sample = ds[0]
+print(sample["decomp_family"], sample["decomp_params"])
+sample["image"]   # PIL.Image, 256×256 RdBu_r-rendered residual</code></pre>
+
+    <p>
+      39,716 rows. Each row pairs a 256×256 PNG with its decomposition family,
+      parameters, upsampling method, scale, 40-dim signature vector, and pre-computed
+      2D + 3D UMAP coordinates. ~3.3 GiB compressed, sharded into 8 parquet files.
+    </p>
+
+    <h3>Reproduce the original 4.28 TB</h3>
+    <pre><code>git clone https://github.com/bshepp/RESIDUALS
+cd RESIDUALS
+pip install -r requirements.txt
+python run_exhaustive.py --dem fairfield_sample_1.5ft.npy</code></pre>
+
+    <h3>Rebuild these visuals</h3>
+    <pre><code>git clone https://github.com/bshepp/residuals-visuals
+cd residuals-visuals
+pip install -r requirements.txt
+python scripts/01_build_catalog.py
+python scripts/04_compute_signatures.py    # ~4 hr, throttled
+python scripts/02_build_zoo.py
+python scripts/03_build_sweeps.py
+python scripts/05_compute_umap.py
+python scripts/06_render_atlas.py
+python scripts/07_compute_umap_3d.py
+python scripts/08_build_explorer.py</code></pre>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="container">
+    <h2>Methods catalog</h2>
+    <p>
+      The 593 decomposition configurations span 24 algorithm families. The 25 upsamplers
+      span polynomial, frequency, spline, and adaptive-edge methods. Everything is
+      released under Apache 2.0 with full method-parameter spaces documented as prior art.
+    </p>
+    <table>
+      <thead><tr><th>Family</th><th>Category</th><th>Configs</th><th>What it preserves</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">gaussian</td><td>classical</td><td>6</td><td>smooth regions, large-scale features</td></tr>
+        <tr><td class="mono">gaussian_anisotropic</td><td>classical</td><td>25</td><td>directional features along low-σ axis</td></tr>
+        <tr><td class="mono">uniform</td><td>classical</td><td>6</td><td>average local elevation</td></tr>
+        <tr><td class="mono">median</td><td>edge_preserving</td><td>6</td><td>step discontinuities</td></tr>
+        <tr><td class="mono">bilateral</td><td>edge_preserving</td><td>100</td><td>sharp edges (roads, walls)</td></tr>
+        <tr><td class="mono">guided</td><td>edge_preserving</td><td>16</td><td>edges defined by guide image</td></tr>
+        <tr><td class="mono">anisotropic_diffusion</td><td>edge_preserving</td><td>64</td><td>edges above gradient threshold</td></tr>
+        <tr><td class="mono">wavelet_dwt</td><td>wavelet</td><td>30</td><td>multi-scale frequency structure</td></tr>
+        <tr><td class="mono">wavelet_biorthogonal</td><td>wavelet</td><td>25</td><td>multi-scale w/ linear phase</td></tr>
+        <tr><td class="mono">wavelet_reverse_biorthogonal</td><td>wavelet</td><td>25</td><td>reversed wavelet decomposition</td></tr>
+        <tr><td class="mono">morphological*</td><td>morphological</td><td>207</td><td>features matching structuring element</td></tr>
+        <tr><td class="mono">tophat / tophat_combined</td><td>morphological</td><td>13</td><td>small bright/dark features</td></tr>
+        <tr><td class="mono">rolling_ball</td><td>morphological</td><td>5</td><td>features smaller than ball radius</td></tr>
+        <tr><td class="mono">polynomial / polynomial_high / local</td><td>trend_removal</td><td>18</td><td>local deviations from trend</td></tr>
+        <tr><td class="mono">dog / dog_multiscale</td><td>multiscale</td><td>56</td><td>blob-like features at chosen scale</td></tr>
+        <tr><td class="mono">log</td><td>multiscale</td><td>6</td><td>blob-like features (Laplacian-of-Gaussian)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="container">
+    <h2>Citation</h2>
+    <p>If you use any of this, please cite the Zenodo archive (canonical):</p>
+    <pre><code>@dataset{shepherd_residuals_2026,
+  author    = {Shepherd, Bryan},
+  title     = {RESIDUALS: 39,731-residual exhaustive parameter sweep of
+               decomposition × upsampling methods on a Fairfield County,
+               Ohio LiDAR DEM},
+  year      = 2026,
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.19903273},
+  url       = {https://doi.org/10.5281/zenodo.19903273}
+}</code></pre>
+    <p>Or the Hugging Face dataset (rendered subset for ML use):</p>
+    <pre><code>@dataset{shepherd_residuals_fingerprints_2026,
+  author    = {Shepherd, Bryan},
+  title     = {RESIDUALS — LiDAR DEM residual fingerprints (39,716 rows)},
+  year      = 2026,
+  publisher = {Hugging Face},
+  url       = {https://huggingface.co/datasets/bshepp/residuals-fingerprints}
+}</code></pre>
+    <p style="color: var(--fg-dim); font-size: 0.92em;">
+      Concept DOI (always points to latest version):
+      <a href="https://doi.org/10.5281/zenodo.19903272">10.5281/zenodo.19903272</a>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>
+      © 2026 Bryan Shepherd · Apache 2.0 ·
+      <a href="https://github.com/bshepp/residuals-visuals">source on GitHub</a> ·
+      <a href="https://briansheppard.com">briansheppard.com</a>
+    </p>
+    <p style="font-size: 0.85em; margin-top: 0.5em;">
+      Source DEM: Fairfield County, Ohio LiDAR survey (BS000600–BS000603.las), Ohio State Plane South.
+      Hosted on AWS S3 + CloudFront.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
