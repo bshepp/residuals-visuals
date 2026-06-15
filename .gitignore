@@ -9,6 +9,10 @@ package/
 blender_scenes/
 exploration/*.png
 
+# site media (large — deploy to S3, not git)
+site/assets/
+site/atlas_explorer.html
+
 # editor
 .vscode/
 .idea/

@@ -1,0 +1,54 @@
+{
+  "CallerReference": "residuals-site-init-2026",
+  "Aliases": {
+    "Quantity": 1,
+    "Items": ["residuals.briansheppard.com"]
+  },
+  "DefaultRootObject": "index.html",
+  "Origins": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "Id": "S3-residuals-briansheppard-com",
+        "DomainName": "residuals-briansheppard-com.s3.us-east-1.amazonaws.com",
+        "S3OriginConfig": { "OriginAccessIdentity": "" },
+        "OriginAccessControlId": "E3QRM5XIRKK5DD",
+        "ConnectionAttempts": 3,
+        "ConnectionTimeout": 10
+      }
+    ]
+  },
+  "DefaultCacheBehavior": {
+    "TargetOriginId": "S3-residuals-briansheppard-com",
+    "ViewerProtocolPolicy": "redirect-to-https",
+    "AllowedMethods": {
+      "Quantity": 2,
+      "Items": ["GET", "HEAD"],
+      "CachedMethods": { "Quantity": 2, "Items": ["GET", "HEAD"] }
+    },
+    "Compress": true,
+    "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+    "ResponseHeadersPolicyId": "67f7725c-6f97-4210-82d7-5512b31e9d03"
+  },
+  "Comment": "residuals.briansheppard.com static site",
+  "Enabled": true,
+  "ViewerCertificate": {
+    "ACMCertificateArn": "arn:aws:acm:us-east-1:290318879194:certificate/c5a47612-a91c-4e19-94e5-f61a17ee4911",
+    "SSLSupportMethod": "sni-only",
+    "MinimumProtocolVersion": "TLSv1.2_2021"
+  },
+  "PriceClass": "PriceClass_100",
+  "HttpVersion": "http2and3",
+  "IsIPV6Enabled": true,
+  "CustomErrorResponses": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "ErrorCode": 403,
+        "ResponseCode": "404",
+        "ResponsePagePath": "/index.html",
+        "ErrorCachingMinTTL": 10
+      }
+    ]
+  }
+}
