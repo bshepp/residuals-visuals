@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0a0a0c">
+<title>404 — RESIDUALS</title>
+<meta name="description" content="Nothing is published at this address on residuals.briansheppard.com.">
+<meta name="robots" content="noindex">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --bg-elev: #14141a;
+    --fg: #e7e7ec;
+    --fg-dim: #9a9aa6;
+    --fg-faint: #5a5a66;
+    --accent: #d14a7b;
+    --accent-2: #4ad1c8;
+    --rule: #25252e;
+    --code-bg: #1d1d24;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-2); text-decoration: none; border-bottom: 1px solid transparent; }
+  a:hover { border-bottom-color: var(--accent-2); }
+  code, pre, .mono { font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace; }
+  code { background: var(--code-bg); padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.92em; }
+  pre {
+    background: var(--code-bg);
+    padding: 1em 1.2em;
+    border-radius: 6px;
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 4em 0; }
+  h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
+  h1 { font-size: 2.6rem; font-weight: 700; margin: 0 0 0.4em; letter-spacing: -0.025em; }
+  h2 { font-size: 1.7rem; font-weight: 600; margin: 0 0 0.6em; }
+  h3 { font-size: 1.15rem; font-weight: 600; margin: 1.6em 0 0.4em; color: var(--fg); }
+  p { margin: 0 0 1em; }
+  ul, ol { padding-left: 1.4em; margin: 0 0 1em; }
+  li { margin-bottom: 0.4em; }
+  table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.94em; }
+  th, td { text-align: left; padding: 0.55em 0.9em; border-bottom: 1px solid var(--rule); }
+  th { color: var(--fg-dim); font-weight: 500; }
+  td.mono { font-size: 0.88em; }
+  figure { margin: 2.2em 0; }
+  figcaption { font-size: 0.86em; color: var(--fg-dim); margin-top: 0.7em; text-align: center; }
+  img, video, iframe { max-width: 100%; display: block; }
+  img.framed, video.framed {
+    border-radius: 6px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.45);
+    border: 1px solid var(--rule);
+  }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 1.4em; }
+  .hero {
+    padding: 5.5em 0 3em;
+    border-bottom: 1px solid var(--rule);
+    background:
+      radial-gradient(circle at 20% 0%, rgba(209, 74, 123, 0.10), transparent 50%),
+      radial-gradient(circle at 80% 30%, rgba(74, 209, 200, 0.07), transparent 50%);
+  }
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 1.2em;
+  }
+  .lede {
+    font-size: 1.22rem;
+    color: var(--fg-dim);
+    max-width: 56ch;
+    line-height: 1.55;
+  }
+  .badges {
+    margin-top: 2em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7em;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.45em 0.95em;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: 0.86rem;
+    color: var(--fg);
+    transition: border-color 120ms;
+  }
+  .badge:hover { border-color: var(--accent-2); }
+  .badge .label { color: var(--fg-faint); margin-right: 0.2em; }
+
+  section { padding: 4em 0; }
+  section.tight { padding: 2.5em 0; }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5em;
+    margin: 2em 0;
+  }
+  .stat {
+    padding: 1.2em 1.4em;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+  }
+  .stat .num {
+    font-size: 1.95rem;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .stat .label {
+    color: var(--fg-dim);
+    font-size: 0.84rem;
+    margin-top: 0.25em;
+  }
+
+  .video-wrap {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: black;
+  }
+  .video-wrap video { width: 100%; display: block; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5em;
+  }
+  @media (max-width: 720px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    h1 { font-size: 2rem; }
+    .lede { font-size: 1.05rem; }
+  }
+
+  .iframe-wrap {
+    width: 100%;
+    height: 720px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: black;
+  }
+  .iframe-wrap iframe { width: 100%; height: 100%; border: 0; }
+
+  footer {
+    padding: 3em 0 4em;
+    border-top: 1px solid var(--rule);
+    color: var(--fg-dim);
+    font-size: 0.92rem;
+  }
+  footer a { color: var(--fg-dim); border-bottom: 1px solid var(--rule); }
+  footer a:hover { color: var(--accent-2); border-bottom-color: var(--accent-2); }
+
+  .toc {
+    border-left: 2px solid var(--rule);
+    padding: 0.6em 0 0.6em 1.4em;
+    margin: 2em 0;
+    color: var(--fg-dim);
+    font-size: 0.95em;
+  }
+  .toc a { color: var(--fg); border: 0; }
+  .toc a:hover { color: var(--accent-2); }
+  .toc ul { padding-left: 0; list-style: none; }
+  .toc li { margin-bottom: 0.3em; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">RESIDUALS · HTTP 404</div>
+    <h1>Nothing at this address</h1>
+    <p class="lede">
+      The page you asked for is not part of this site. If a link brought you here, it is out of date.
+      The <a href="/">front page</a> holds the atlas, the algorithm zoo, the parameter-sweep videos and the
+      flythrough; the data lives on
+      <a href="https://huggingface.co/datasets/bshepp/residuals-fingerprints">Hugging Face</a> and the code on
+      <a href="https://github.com/bshepp/residuals-visuals">GitHub</a>.
+    </p>
+  </div>
+</header>
+
+<footer>
+  <div class="container">
+    <p>
+      © 2026 Brian Sheppard · Apache 2.0 ·
+      <a href="https://github.com/bshepp/residuals-visuals">source on GitHub</a> ·
+      <a href="https://briansheppard.com">briansheppard.com</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -2,7 +2,9 @@
   "CallerReference": "residuals-site-init-2026",
   "Aliases": {
     "Quantity": 1,
-    "Items": ["residuals.briansheppard.com"]
+    "Items": [
+      "residuals.briansheppard.com"
+    ]
   },
   "DefaultRootObject": "index.html",
   "Origins": {
@@ -11,7 +13,9 @@
       {
         "Id": "S3-residuals-briansheppard-com",
         "DomainName": "residuals-briansheppard-com.s3.us-east-1.amazonaws.com",
-        "S3OriginConfig": { "OriginAccessIdentity": "" },
+        "S3OriginConfig": {
+          "OriginAccessIdentity": ""
+        },
         "OriginAccessControlId": "E3QRM5XIRKK5DD",
         "ConnectionAttempts": 3,
         "ConnectionTimeout": 10
@@ -23,8 +27,17 @@
     "ViewerProtocolPolicy": "redirect-to-https",
     "AllowedMethods": {
       "Quantity": 2,
-      "Items": ["GET", "HEAD"],
-      "CachedMethods": { "Quantity": 2, "Items": ["GET", "HEAD"] }
+      "Items": [
+        "GET",
+        "HEAD"
+      ],
+      "CachedMethods": {
+        "Quantity": 2,
+        "Items": [
+          "GET",
+          "HEAD"
+        ]
+      }
     },
     "Compress": true,
     "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
@@ -41,12 +54,18 @@
   "HttpVersion": "http2and3",
   "IsIPV6Enabled": true,
   "CustomErrorResponses": {
-    "Quantity": 1,
+    "Quantity": 2,
     "Items": [
       {
         "ErrorCode": 403,
+        "ResponsePagePath": "/404.html",
         "ResponseCode": "404",
-        "ResponsePagePath": "/index.html",
+        "ErrorCachingMinTTL": 10
+      },
+      {
+        "ErrorCode": 404,
+        "ResponsePagePath": "/404.html",
+        "ResponseCode": "404",
         "ErrorCachingMinTTL": 10
       }
     ]
